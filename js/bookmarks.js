@@ -188,6 +188,19 @@ var bookmarks = (function() {
     all.push(newBookmark);
   };
 
+  var move = function(override) {
+    var options = {
+      oldIndex: null,
+      newIndex: null
+    };
+    if (override) {
+      options = helper.applyOptions(options, override);
+    };
+    console.log("oldIndex", options.oldIndex);
+    console.log(get()[options.oldIndex]);
+    get().splice(options.oldIndex, 0, get().splice(options.newIndex, 1)[0]);
+  };
+
   var edit = function(object, timeStamp) {
     for (var i = 0; i < all.length; i++) {
       if (all[i].timeStamp === timeStamp) {
@@ -217,7 +230,8 @@ var bookmarks = (function() {
     get: get,
     add: add,
     edit: edit,
-    remove: remove
+    remove: remove,
+    move: move
   };
 
 })();

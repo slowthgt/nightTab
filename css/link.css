@@ -56,6 +56,10 @@
   transition: none;
 }
 
+.sortable-chosen {
+  border: 2px solid red;
+}
+
 .link-panel-front {
   background-color: rgb(var(--gray-02));
   border-radius: var(--radius);
