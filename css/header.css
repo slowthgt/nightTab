@@ -50,7 +50,7 @@
 }
 
 .header-item {
-  margin: var(--gutter);
+  margin: 0 var(--gutter);
   display: flex;
   flex-wrap: nowrap;
   justify-content: center;
@@ -104,6 +104,13 @@
 .header-accent,
 .header-menu {
   display: none;
+}
+.header-date,
+.header-clock,
+.header-search,
+.header-edit-add,
+.header-accent {
+  font-size: var(--header-size);
 }
 
 .is-header-search-show .header-search,

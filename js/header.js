@@ -55,10 +55,14 @@ var header = (function() {
     var _padding = function() {
       html.style.setProperty("--header-shade-padding", state.get().header.shade.padding);
     };
+    var _size = function() {
+      html.style.setProperty("--header-size", state.get().header.size + "em");
+    };
     _color();
     _opacity();
     _padding();
     _margin();
+    _size();
   };
 
   var init = function() {

@@ -54,6 +54,7 @@ var state = (function() {
       accent: {
         show: true,
       },
+      size: 1,
       shade: {
         show: true,
         padding: 4,

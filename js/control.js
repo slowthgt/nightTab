@@ -343,6 +343,14 @@ var control = (function() {
       header.render();
     }
   }, {
+    element: helper.e(".control-header-size"),
+    path: "header.size",
+    type: "range",
+    valueMod: ["float"],
+    func: function() {
+      header.render();
+    }
+  }, {
     element: helper.e(".control-bookmarks-show-link"),
     path: "bookmarks.show.link",
     type: "checkbox",
@@ -595,10 +603,10 @@ var control = (function() {
           path: object.path,
           newValue: newValue
         });
-        // console.log(object.path, helper.getObject({
-        //   object: state.get(),
-        //   path: object.path
-        // }));
+        console.log(object.path, helper.getObject({
+          object: state.get(),
+          path: object.path
+        }));
       };
     };
     var bindControl = function(object) {
