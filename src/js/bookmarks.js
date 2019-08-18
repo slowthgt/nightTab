@@ -1,6 +1,8 @@
 var bookmarks = (function() {
 
-  var all = [{
+  var mod = {};
+
+  mod.all = [{
     display: "icon",
     letter: "DEV",
     icon: {
@@ -173,12 +175,12 @@ var bookmarks = (function() {
     timeStamp: 1546453111953
   }];
 
-  var get = function(data) {
+  mod.get = function(data) {
     var _singleBookmark = function() {
       var found = false;
-      for (var i = 0; i < all.length; i++) {
-        if (all[i].timeStamp === data.timeStamp) {
-          found = all[i];
+      for (var i = 0; i < mod.all.length; i++) {
+        if (mod.all[i].timeStamp === data.timeStamp) {
+          found = mod.all[i];
         };
       };
       return found;
@@ -186,37 +188,37 @@ var bookmarks = (function() {
     if (data && typeof data.timeStamp == "number") {
       return _singleBookmark();
     } else {
-      return all;
+      return mod.all;
     };
   };
 
-  var restore = function(data) {
+  mod.restore = function(data) {
     if ("bookmarks" in data) {
-      all = data.bookmarks;
+      mod.all = data.bookmarks;
     };
   };
 
-  var add = function(data) {
-    all.push(data);
+  mod.add = function(data) {
+    mod.all.push(data);
   };
 
-  var edit = function(data) {
-    for (var i = 0; i < all.length; i++) {
-      if (all[i].timeStamp === data.timeStamp) {
-        all[i] = data;
+  mod.edit = function(data) {
+    for (var i = 0; i < mod.all.length; i++) {
+      if (mod.all[i].timeStamp === data.timeStamp) {
+        mod.all[i] = data;
       };
     };
   };
 
-  var remove = function(data) {
-    for (var i = 0; i < all.length; i++) {
-      if (all[i].timeStamp === data.timeStamp) {
-        all.splice(all.indexOf(all[i]), 1);
+  mod.remove = function(data) {
+    for (var i = 0; i < mod.all.length; i++) {
+      if (mod.all[i].timeStamp === data.timeStamp) {
+        mod.all.splice(mod.all.indexOf(mod.all[i]), 1);
       };
     };
   };
 
-  var sort = function(by) {
+  mod.sort = function(by) {
     var action = {
       name: function(array) {
         return helper.sortObject(array, "name");
@@ -228,30 +230,53 @@ var bookmarks = (function() {
         return helper.sortObject(array, "icon.name");
       }
     };
-    all = action[by](all);
+    mod.all = action[by](mod.all);
+  };
+
+  mod.move = function(origin, destination) {
+    mod.all = helper.moveArrayItem(mod.all, origin, destination);
+  };
+
+  var get = function(data) {
+    return mod.get(data);
+  };
+
+  var add = function(data) {
+    mod.add(data);
+  };
+
+  var edit = function(data) {
+    mod.edit(data);
+  };
+
+  var sort = function(by) {
+    mod.sort(by);
   };
 
   var move = function(origin, destination) {
-    all = helper.moveArrayItem(all, origin, destination);
+    mod.move(origin, destination);
+  };
+
+  var remove = function(data) {
+    mod.remove(data);
   };
 
   var init = function() {
     if (data.load()) {
-      restore(data.load());
+      mod.restore(data.load());
     };
   };
 
   // exposed methods
   return {
-    all: all,
     init: init,
+    mod: mod,
     get: get,
     add: add,
     edit: edit,
     sort: sort,
     move: move,
-    remove: remove,
-    restore: restore
+    remove: remove
   };
 
 })();

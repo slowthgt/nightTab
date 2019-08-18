@@ -9,7 +9,7 @@
   transform: translate(-50%, -50%);
   opacity: 0;
   perspective: 1000px;
-  transition: opacity var(--layout-transition-speed-fast) ease-in-out;
+  transition: opacity var(--layout-timing-extra-fast);
   z-index: var(--z-index-modal);
 }
 
@@ -34,15 +34,11 @@
   grid-template-rows: 1fr auto;
   justify-items: stretch;
   align-items: stretch;
-  transition: opacity var(--layout-transition-speed-fast);
+  transition: opacity var(--layout-timing-extra-fast);
 }
 
 .modal-wrapper .container {
   max-width: 100%;
-}
-
-.is-transition-end .modal-wrapper {
-  transition: opacity var(--layout-transition-speed-fast) ease-in-out;
 }
 
 .modal-body {

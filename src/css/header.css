@@ -45,7 +45,7 @@
   top: 0;
   left: 0;
   pointer-events: none;
-  transition: background-color var(--layout-transition-speed-slow) ease-in-out, opacity var(--layout-transition-speed-slow) ease-in-out, border-radius var(--layout-transition-speed-fast) ease-in-out;
+  transition: background-color var(--layout-timing-medium), opacity var(--layout-timing-medium), border-radius var(--layout-timing-extra-fast);
 }
 
 .is-header-radius .header-shade {

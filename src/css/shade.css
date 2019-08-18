@@ -6,11 +6,12 @@
   width: calc(100% + 2em);
   height: calc(100% + 2em);
   opacity: 0;
-  transition: opacity var(--layout-transition-speed-fast) ease-in-out, background-color var(--layout-transition-speed-fast) ease-in-out;
+  transition: opacity var(--layout-timing-extra-fast), background-color var(--layout-timing-extra-fast);
   z-index: var(--z-index-shade);
 }
 
-.is-background-image-show .shade {
+.is-background-image-show .shade,
+.is-background-color-by-custom .shade {
   background-color: rgba(var(--theme-black), 0.5);
 }
 

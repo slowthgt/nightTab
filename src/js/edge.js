@@ -3,7 +3,27 @@ var edge = (function() {
   var _timer = null;
   var _currentEdge = null;
 
-  var destroy = function() {
+  var mod = {};
+
+  mod.open = function() {
+    helper.setObject({
+      object: state.get(),
+      path: "edge",
+      newValue: true
+    });
+  };
+
+  mod.close = function() {
+    helper.setObject({
+      object: state.get(),
+      path: "edge",
+      newValue: false
+    });
+  };
+
+  var render = {};
+
+  render.close = function() {
     var allEdge = helper.eA(".edge");
     if (allEdge[0]) {
       for (var i = 0; i < allEdge.length; i++) {
@@ -12,7 +32,7 @@ var edge = (function() {
     };
   };
 
-  var render = function(override) {
+  render.open = function(override) {
     var options = {
       element: null,
       delay: null
@@ -30,11 +50,6 @@ var edge = (function() {
       _currentEdge.style.left = rect.left + scrollLeft + "px";
     };
     var _makeEdge = function() {
-      helper.setObject({
-        object: state.get(),
-        path: "edge",
-        newValue: true
-      });
       var html = helper.e("html");
       var body = helper.e("body");
       var edgeElement = helper.node("div|class:edge is-transparent");
@@ -46,11 +61,6 @@ var edge = (function() {
           edgeElement.remove();
         };
         _currentEdge = null;
-        helper.setObject({
-          object: state.get(),
-          path: "edge",
-          newValue: false
-        });
       };
       edgeElement.addEventListener("transitionend", function(event, elapsed) {
         if (event.propertyName === "opacity" && getComputedStyle(this).opacity == 0) {
@@ -79,10 +89,22 @@ var edge = (function() {
     };
   };
 
+  var box = {
+    open: function(override) {
+      mod.open();
+      render.open(override);
+    },
+    close: function() {
+      mod.close();
+      render.close();
+    }
+  };
+
   // exposed methods
   return {
+    mod: mod,
     render: render,
-    destroy: destroy
+    box: box
   };
 
 })();

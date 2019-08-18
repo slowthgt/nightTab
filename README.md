@@ -43,6 +43,23 @@ A neutral new tab page accented with a chosen colour. Customise the layout, styl
 - Responsive design
 
 ---
+
+### Development
+
+When developing use:
+- `npm run dev`
+
+A Development copy will be created in `/dev/`. Open `/dev/index.html` in a browsers to test. Make changes on files in the `/src/` directory and refresh browser to see changes.
+
+
+To build the project use:
+- `npm run build`
+
+A web ready folder will be created in `/build/web/`.
+A browser addon/extension ready zip will be created at `/build/extension/`.
+
+---
+
 [![nightTab Demo](assets/demo/demo-001.gif)](https://zombiefox.github.io/nightTab/)
 [![nightTab Demo](assets/demo/demo-002.gif)](https://zombiefox.github.io/nightTab/)
 [![nightTab Demo](assets/demo/demo-003.gif)](https://zombiefox.github.io/nightTab/)

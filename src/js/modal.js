@@ -1,17 +1,45 @@
 var modal = (function() {
 
-  var previousModal = null;
+  var _previousModal = null;
 
-  var destroy = function() {
+  var mod = {};
+
+  mod.open = function() {
+    helper.setObject({
+      object: state.get(),
+      path: "modal",
+      newValue: true
+    });
+  };
+
+  mod.close = function() {
+    helper.setObject({
+      object: state.get(),
+      path: "modal",
+      newValue: false
+    });
+  };
+
+  var render = {};
+
+  render.toggle = function(override) {
+    if (state.get().modal) {
+      render.open(override);
+    } else {
+      render.close();
+    };
+  };
+
+  render.close = function() {
     var allModal = helper.eA(".modal");
     if (allModal[0]) {
       for (var i = 0; i < allModal.length; i++) {
-        allModal[i].destroy();
+        allModal[i].close();
       };
     };
   };
 
-  var render = function(override) {
+  render.open = function(override) {
     var options = {
       heading: "Modal",
       content: "Body",
@@ -25,11 +53,7 @@ var modal = (function() {
       options = helper.applyOptions(options, override);
     };
     var _makeModal = function() {
-      helper.setObject({
-        object: state.get(),
-        path: "modal",
-        newValue: true
-      });
+      mod.open();
       var body = helper.e("body");
       var modalWrapper = document.createElement("div");
       modalWrapper.setAttribute("class", "modal-wrapper");
@@ -41,7 +65,7 @@ var modal = (function() {
       } else if (options.size) {
         modal.setAttribute("class", "modal");
       };
-      modal.destroy = function() {
+      modal.close = function() {
         if (modal.classList.contains("is-opaque")) {
           helper.removeClass(modal, "is-opaque");
           helper.addClass(modal, "is-transparent");
@@ -49,11 +73,7 @@ var modal = (function() {
         } else {
           modal.remove();
         };
-        helper.setObject({
-          object: state.get(),
-          path: "modal",
-          newValue: false
-        });
+        mod.close();
       };
       var modalBody = document.createElement("div");
       modalBody.setAttribute("class", "modal-body");
@@ -95,54 +115,54 @@ var modal = (function() {
         if (event.propertyName === "opacity" && getComputedStyle(this).opacity == 0) {
           this.parentElement.removeChild(this);
         };
-        if (event.propertyName === "opacity" && getComputedStyle(this).opacity == 1) {
-          helper.addClass(this, "is-transition-end");
-        };
       }.bind(modal), false);
       actionButton.addEventListener("click", function(event) {
         if (options.successAction) {
           options.successAction();
         };
-        this.destroy();
-        shade.destroy();
-        page.update();
+        this.close();
       }.bind(modal), false);
       cancelButton.addEventListener("click", function(event) {
         if (options.cancelAction) {
           options.cancelAction();
         };
-        this.destroy();
-        shade.destroy();
-        page.update();
+        this.close();
       }.bind(modal), false);
-      previousModal = modal;
-      shade.render({
-        action: function() {
-          if (options.cancelAction) {
-            options.cancelAction();
-          };
-          modal.destroy();
-          page.update();
-        },
-        includeHeader: true
-      });
+      _previousModal = modal;
       body.appendChild(modal);
       getComputedStyle(modal).opacity;
       helper.removeClass(modal, "is-transparent");
       helper.addClass(modal, "is-opaque");
       modalHeading.focus(this);
     };
-    if (previousModal != null) {
-      destroy();
+    if (_previousModal != null) {
+      render.close();
     };
     _makeModal();
-    page.update();
+  };
+
+  var open = function(override) {
+    mod.open();
+    render.open(override);
+  };
+
+  var close = function() {
+    mod.close();
+    render.close();
+  };
+
+  var init = function() {
+    mod.close();
+    render.close();
   };
 
   // exposed methods
   return {
-    destroy: destroy,
-    render: render
+    init: init,
+    mod: mod,
+    render: render,
+    open: open,
+    close: close
   };
 
 })();

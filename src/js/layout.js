@@ -1,36 +1,23 @@
 var layout = (function() {
 
-  var render = {
-    width: function() {
-      _renderWidth();
-    },
-    padding: function() {
-      _renderPadding();
-    },
-    gutter: function() {
-      _renderGutter();
-    },
-    order: function() {
-      _renderOrder();
-    }
-  };
+  var render = {};
 
-  var _renderWidth = function() {
+  render.width = function() {
     var html = helper.e("html");
     html.style.setProperty("--layout-width", state.get().layout.width + "%");
   };
 
-  var _renderPadding = function() {
+  render.padding = function() {
     var html = helper.e("html");
     html.style.setProperty("--layout-padding-multiplier", state.get().layout.padding);
   };
 
-  var _renderGutter = function() {
+  render.gutter = function() {
     var html = helper.e("html");
     html.style.setProperty("--layout-gutter-multiplier", state.get().layout.gutter);
   };
 
-  var _renderOrder = function() {
+  render.order = function() {
     var html = helper.e("html");
     var layout = helper.e(".layout");
     var header = helper.e(".header");
@@ -42,11 +29,17 @@ var layout = (function() {
     };
   };
 
+  render.title = function() {
+    var title = helper.e("title");
+    title.textContent = state.get().layout.title;
+  };
+
   var init = function() {
     render.width();
     render.padding();
     render.gutter();
     render.order();
+    render.title();
   };
 
   // exposed methods
