@@ -6,27 +6,43 @@ var keyboard = (function() {
     window.addEventListener("keydown", function(event) {
       //  esc
       if (event.keyCode == 27) {
-        if (state.get().edge) {
-          edge.render.clear();
-        } else if (state.get().menu) {
+        if (state.get.current().edge) {
+          edge.box.close();
+        } else if (state.get.current().menu) {
           menu.close();
-          shade.close();
-        } else if (state.get().autoSuggest) {
+        } else if (state.get.current().dropdown) {
+          dropdown.close();
+        } else if (state.get.current().autoSuggest) {
           autoSuggest.close();
-        } else if (state.get().link.add) {
-          link.add.close();
-          shade.close();
-        } else if (state.get().modal) {
+        } else if (state.get.current().link.edit) {
+          link.edit.item.close();
           modal.close();
           shade.close();
-        } else if (state.get().link.edit) {
-          helper.setObject({
-            object: state.get(),
-            path: "link.edit",
-            newValue: false
-          });
-          control.render.update();
-          control.render.class();
+          data.save();
+        } else if (state.get.current().link.add) {
+          link.add.item.close();
+          modal.close();
+          shade.close();
+          data.save();
+        } else if (state.get.current().group.edit) {
+          link.edit.group.close();
+          modal.close();
+          shade.close();
+          data.save();
+        } else if (state.get.current().group.add) {
+          link.add.group.close();
+          modal.close();
+          shade.close();
+          data.save();
+        } else if (state.get.current().modal) {
+          modal.close();
+          shade.close();
+        } else if (state.get.current().edit) {
+          link.edit.mode.close();
+          data.save();
+        };
+        if (state.get.current().pagelock) {
+          pagelock.unlock();
         };
         data.save();
       };
@@ -37,14 +53,55 @@ var keyboard = (function() {
     window.addEventListener("keydown", function(event) {
       // ctrl+alt+a
       if (event.ctrlKey && event.altKey && event.keyCode == 65) {
-        if (!state.get().link.add) {
-          if (state.get().menu) {
-            menu.close();
-          };
-          if (state.get().modal) {
-            modal.close();
-          };
-          link.add.open();
+        if (state.get.current().menu) {
+          menu.close();
+        };
+        if (state.get.current().link.edit) {
+          link.edit.item.close();
+          shade.close();
+          data.save();
+        };
+        if (state.get.current().group.edit) {
+          link.edit.group.close();
+          shade.close();
+          data.save();
+        };
+        if (state.get.current().group.add) {
+          link.add.group.close();
+          shade.close();
+          data.save();
+        };
+        if (!state.get.current().link.add) {
+          link.add.item.open();
+        };
+      };
+    }, false);
+  };
+
+  bind.ctrAltG = function() {
+    window.addEventListener("keydown", function(event) {
+      // ctrl+alt+g
+      if (event.ctrlKey && event.altKey && event.keyCode == 71) {
+        if (state.get.current().menu) {
+          menu.close();
+        };
+        if (state.get.current().link.edit) {
+          link.edit.item.close();
+          shade.close();
+          data.save();
+        };
+        if (state.get.current().link.add) {
+          link.add.item.close();
+          shade.close();
+          data.save();
+        };
+        if (state.get.current().group.edit) {
+          link.edit.group.close();
+          shade.close();
+          data.save();
+        };
+        if (!state.get.current().group.add) {
+          link.add.group.open();
         };
       };
     }, false);
@@ -54,8 +111,8 @@ var keyboard = (function() {
     window.addEventListener("keydown", function(event) {
       // ctrl+alt+d
       if (event.ctrlKey && event.altKey && event.keyCode == 68) {
-        theme.toggle();
-        control.render.update();
+        theme.style.toggle();
+        control.render.update.control.menu();
         data.save();
       };
     }, false);
@@ -65,10 +122,31 @@ var keyboard = (function() {
     window.addEventListener("keydown", function(event) {
       // ctrl+alt+m
       if (event.ctrlKey && event.altKey && event.keyCode == 77) {
-        if (state.get().link.add) {
-          link.add.close();
+        if (state.get.current().link.edit) {
+          link.edit.item.close();
+          modal.close();
           shade.close();
-        } else if (state.get().modal) {
+          data.save();
+        };
+        if (state.get.current().link.add) {
+          link.add.item.close();
+          modal.close();
+          shade.close();
+          data.save();
+        };
+        if (state.get.current().group.edit) {
+          link.edit.group.close();
+          modal.close();
+          shade.close();
+          data.save();
+        };
+        if (state.get.current().group.add) {
+          link.add.group.close();
+          modal.close();
+          shade.close();
+          data.save();
+        };
+        if (state.get.current().modal) {
           modal.close();
           shade.close();
         };
@@ -81,10 +159,11 @@ var keyboard = (function() {
     window.addEventListener("keydown", function(event) {
       // ctrl+alt+e
       if (event.ctrlKey && event.altKey && event.keyCode == 69) {
-        link.edit();
-        link.tabindex();
-        control.render.update();
-        control.render.class();
+        if (bookmarks.get().length > 0) {
+          link.edit.mode.toggle();
+        } else {
+          link.edit.mode.close();
+        };
         data.save();
       };
     }, false);
@@ -93,10 +172,10 @@ var keyboard = (function() {
   bind.ctrAltR = function() {
     window.addEventListener("keydown", function(event) {
       // ctrl+alt+r
-      if (state.get().theme.accent.random.active && event.ctrlKey && event.altKey && event.keyCode == 82) {
-        theme.render.accent.random();
-        theme.render.accent.color();
-        link.items();
+      if (state.get.current().theme.accent.random.active && event.ctrlKey && event.altKey && event.keyCode == 82) {
+        theme.accent.random();
+        control.render.update.control.header();
+        control.render.update.control.menu();
         data.save();
       };
     }, false);
@@ -105,6 +184,7 @@ var keyboard = (function() {
   var init = function() {
     bind.esc();
     bind.ctrAltA();
+    bind.ctrAltG();
     bind.ctrAltD();
     bind.ctrAltM();
     bind.ctrAltE();

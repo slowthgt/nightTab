@@ -3,70 +3,109 @@ var search = (function() {
   var bind = {};
 
   bind.input = function() {
-    var searchInput = helper.e(".search-input");
-    searchInput.addEventListener("input", function() {
-      mod.searching.set();
-      render.clear.button();
-      link.items();
-    }, false);
+    if (state.get.current().header.search.show) {
+      var searchInput = helper.e(".search-input");
+      searchInput.addEventListener("input", function() {
+        check();
+      }, false);
+    };
   };
 
   bind.clear = function() {
-    var searchClear = helper.e(".search-clear");
-    searchClear.addEventListener("click", function() {
-      render.clear.input();
-      mod.searching.set();
-      render.clear.button();
-      link.items();
-    }, false);
+    if (state.get.current().header.search.show) {
+      var searchClear = helper.e(".search-clear");
+      searchClear.addEventListener("click", function() {
+        mod.searching.close();
+        render.clear.input();
+        render.clear.button();
+        render.searching();
+        link.groupAndItems();
+      }, false);
+    };
   };
 
   var mod = {};
 
   mod.searching = {
-    set: function() {
+    open: function() {
       helper.setObject({
-        object: state.get(),
+        object: state.get.current(),
         path: "search",
-        newValue: helper.e(".search-input").value != ""
+        newValue: true
       });
-    }
-  };
-
-  var get = function() {
-    var searchInput = helper.e(".search-input");
-    if (state.get().search) {
-      var searchedBookmarks = {
-        total: 0,
-        matching: []
+    },
+    close: function() {
+      helper.setObject({
+        object: state.get.current(),
+        path: "search",
+        newValue: false
+      });
+    },
+    get: function() {
+      var searchInput = helper.e(".search-input");
+      var string = helper.trimString(searchInput.value).toLowerCase();
+      if (state.get.current().search) {
+        bookmarks.get().forEach(function(arrayItem, index) {
+          arrayItem.items.forEach(function(arrayItem, index) {
+            arrayItem.searchMatch = false;
+            var matchUrl = helper.checkIfValidString(arrayItem.url) && arrayItem.url.toLowerCase().includes(string);
+            var matchName = helper.checkIfValidString(arrayItem.name) && helper.trimString(arrayItem.name).toLowerCase().includes(string);
+            if (matchUrl || matchName) {
+              arrayItem.searchMatch = true;
+            };
+          });
+        });
       };
-      searchedBookmarks.total = bookmarks.get().length;
+    },
+    clear: function() {
       bookmarks.get().forEach(function(arrayItem, index) {
-        var matchUrl = (arrayItem.url != null) && (arrayItem.url.replace(/^https?\:\/\//i, "").replace(/\/$/, "").toLowerCase().includes(searchInput.value.toLowerCase().replace(/\s/g, "")));
-        var matchName = (arrayItem.name != null) && (arrayItem.name.toLowerCase().replace(/\s/g, "").includes(searchInput.value.toLowerCase().replace(/\s/g, "")));
-        if (matchUrl || matchName) {
-          var bookmarkDataCopy = JSON.parse(JSON.stringify(arrayItem));
-          searchedBookmarks.matching.push(bookmarkDataCopy);
-        };
+        arrayItem.items.forEach(function(arrayItem, index) {
+          arrayItem.searchMatch = false;
+        });
       });
-      return searchedBookmarks;
-    };
+    },
+    count: {
+      all: function() {
+        var searchResultCount = 0;
+        bookmarks.get().forEach(function(arrayItem, index) {
+          arrayItem.items.forEach(function(arrayItem, index) {
+            if (arrayItem.searchMatch) {
+              searchResultCount = searchResultCount + 1;
+            };
+          });
+        });
+        return searchResultCount;
+      },
+      group: function(index) {
+        var searchResultCount = 0;
+        if (bookmarks.get()[index]) {
+          bookmarks.get()[index].items.forEach(function(arrayItem, index) {
+            if (arrayItem.searchMatch) {
+              searchResultCount = searchResultCount + 1;
+            };
+          });
+        };
+        return searchResultCount;
+      }
+    }
   };
 
   var render = {};
 
   render.engine = function() {
-    var search = helper.e(".search");
-    var searchInput = helper.e(".search-input");
-    var placeholder = "";
-    if (state.get().link.show) {
-      placeholder = "Find bookmarks or search";
-    } else {
-      placeholder = "Search";
+    if (state.get.current().header.search.show) {
+      var search = helper.e(".search");
+      var searchInput = helper.e(".search-input");
+      var placeholder = "";
+      if (state.get.current().link.show) {
+        placeholder = "Find bookmarks or search";
+      } else {
+        placeholder = "Search";
+      };
+      placeholder = placeholder + " " + state.get.current().header.search.engine[state.get.current().header.search.engine.selected].name;
+      searchInput.setAttribute("placeholder", placeholder);
+      search.setAttribute("action", state.get.current().header.search.engine[state.get.current().header.search.engine.selected].url);
     };
-    placeholder = placeholder + " " + state.get().header.search.engine[state.get().header.search.engine.selected].name;
-    searchInput.setAttribute("placeholder", placeholder);
-    search.setAttribute("action", state.get().header.search.engine[state.get().header.search.engine.selected].url);
   };
 
   render.clear = {};
@@ -79,7 +118,7 @@ var search = (function() {
 
   render.clear.button = function() {
     var searchClear = helper.e(".search-clear");
-    if (state.get().search) {
+    if (state.get.current().search) {
       searchClear.removeAttribute("disabled");
     } else {
       searchClear.setAttribute("disabled", "");
@@ -87,7 +126,7 @@ var search = (function() {
   };
 
   render.focus = function() {
-    if (state.get().header.search.focus) {
+    if (state.get.current().header.search.show && state.get.current().header.search.focus) {
       window.addEventListener("load", function(event) {
         helper.e(".search-input").focus();
       });
@@ -96,18 +135,34 @@ var search = (function() {
 
   render.searching = function() {
     var html = helper.e("html");
-    var searchInput = helper.e(".search-input");
-    if (searchInput.value != "") {
+    if (state.get.current().search) {
       helper.addClass(html, "is-header-searching");
     } else {
       helper.removeClass(html, "is-header-searching");
     };
   };
 
+  render.check = function() {
+    var searchInput = helper.e(".search-input");
+    if (helper.checkIfValidString(searchInput.value)) {
+      mod.searching.open();
+    } else {
+      mod.searching.close();
+    };
+  };
+
+  var check = function() {
+    render.check();
+    render.searching();
+    render.clear.button();
+    link.groupAndItems();
+  };
+
   var init = function() {
     bind.input();
     bind.clear();
-    mod.searching.set();
+    mod.searching.close();
+    mod.searching.clear();
     render.engine();
     render.focus();
     render.searching();
@@ -116,8 +171,10 @@ var search = (function() {
   // exposed methods
   return {
     init: init,
-    get: get,
-    render: render
+    mod: mod,
+    bind: bind,
+    render: render,
+    check: check
   };
 
 })();

@@ -4,41 +4,38 @@ var layout = (function() {
 
   render.width = function() {
     var html = helper.e("html");
-    html.style.setProperty("--layout-width", state.get().layout.width + "%");
+    html.style.setProperty("--layout-width", state.get.current().layout.width + "%");
   };
 
   render.padding = function() {
     var html = helper.e("html");
-    html.style.setProperty("--layout-padding-multiplier", state.get().layout.padding);
+    html.style.setProperty("--layout-padding", state.get.current().layout.padding);
   };
 
   render.gutter = function() {
     var html = helper.e("html");
-    html.style.setProperty("--layout-gutter-multiplier", state.get().layout.gutter);
+    html.style.setProperty("--layout-gutter", state.get.current().layout.gutter);
   };
 
-  render.order = function() {
+  render.size = function() {
     var html = helper.e("html");
-    var layout = helper.e(".layout");
-    var header = helper.e(".header");
-    var link = helper.e(".link");
-    if (state.get().layout.order == "headerlink") {
-      layout.insertBefore(header, link);
-    } else if (state.get().layout.order == "linkheader") {
-      layout.insertBefore(link, header);
-    };
+    html.style.setProperty("--layout-size", state.get.current().layout.size);
   };
 
   render.title = function() {
     var title = helper.e("title");
-    title.textContent = state.get().layout.title;
+    if (helper.checkIfValidString(state.get.current().layout.title)) {
+      title.textContent = helper.trimString(state.get.current().layout.title);
+    } else {
+      title.textContent = "New Tab";
+    };
   };
 
   var init = function() {
     render.width();
     render.padding();
     render.gutter();
-    render.order();
+    render.size();
     render.title();
   };
 

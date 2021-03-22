@@ -1,9 +1,10 @@
 const {
   src,
   dest,
-  series,
   parallel
 } = require('gulp');
+
+const fileinclude = require('gulp-file-include');
 
 const csso = require('gulp-csso');
 
@@ -11,13 +12,17 @@ const concat = require('gulp-concat');
 
 const uglify = require('gulp-uglify');
 
+const uglifycss = require('gulp-uglifycss');
+
 const replace = require('gulp-replace');
 
 const htmlmin = require('gulp-htmlmin');
 
+const minifyinline = require('gulp-minify-inline');
+
 const watch = require('gulp-watch');
 
-const clean = require('gulp-clean');
+const filter = require('gulp-filter');
 
 const path = {
   src: 'src',
@@ -27,20 +32,54 @@ const path = {
 }
 
 const filename = {
-  css: "nighttab.min.css",
-  jsDependencies: "nighttab.dependencies.js",
-  jsFiles: "nighttab.files.js",
-  js: "nighttab.min.js"
+  css: 'nighttab.min.css',
+  js: 'nighttab.min.js'
 }
 
 const jsDependencies = [
   path.nodeModules + '/html5sortable/dist/html5sortable.min.js',
-  path.nodeModules + '/invert-color/lib/invert.min.js'
+  path.nodeModules + '/moment/min/moment.min.js',
+  path.nodeModules + '/webfontloader/webfontloader.js'
+]
+
+const cssFiles = [
+  path.src + '/css/reset.css',
+  path.src + '/css/variables.css',
+  path.src + '/css/utilities.css',
+  path.src + '/css/base.css',
+  path.src + '/css/layout.css',
+  path.src + '/css/edge.css',
+  path.src + '/css/animation.css',
+  path.src + '/css/fonts.css',
+  path.src + '/css/icons.css',
+  path.src + '/css/state.css',
+  path.src + '/css/typography.css',
+  path.src + '/css/spacing.css',
+  path.src + '/css/button.css',
+  path.src + '/css/form.css',
+  path.src + '/css/shade.css',
+  path.src + '/css/modal.css',
+  path.src + '/css/tip.css',
+  path.src + '/css/menu.css',
+  path.src + '/css/header.css',
+  path.src + '/css/date.css',
+  path.src + '/css/clock.css',
+  path.src + '/css/greeting.css',
+  path.src + '/css/transitional.css',
+  path.src + '/css/search.css',
+  path.src + '/css/background.css',
+  path.src + '/css/group.css',
+  path.src + '/css/link.css',
+  path.src + '/css/theme.css',
+  path.src + '/css/auto-suggest.css',
+  path.src + '/css/coffee.css',
+  path.src + '/css/fontawesome.css'
 ]
 
 const jsFiles = [
   path.src + '/js/helper.js',
   path.src + '/js/data.js',
+  path.src + '/js/ready.js',
   path.src + '/js/fontawesome.js',
   path.src + '/js/update.js',
   path.src + '/js/state.js',
@@ -65,6 +104,7 @@ const jsFiles = [
   path.src + '/js/auto-suggest.js',
   path.src + '/js/pagelock.js',
   path.src + '/js/edge.js',
+  path.src + '/js/dropdown.js',
   path.src + '/js/init.js'
 ]
 
@@ -75,11 +115,16 @@ const build = {
   },
   html: function() {
     return src(path.src + '/index.html')
+      .pipe(fileinclude({
+        prefix: '@@',
+        basepath: '@file'
+      }))
       .pipe(replace(/\<\!\-\-\ css\-block\ \-\-\>([\s\S]*)\<\!\-\-\ end\-css\-block\ \-\-\>/mg, '<link rel="stylesheet" href="css/' + filename.css + '">'))
       .pipe(replace(/\<\!\-\-\ js\-block\ \-\-\>([\s\S]*)\<\!\-\-\ end\-js\-block\ \-\-\>/mg, '<script src="js/' + filename.js + '"></script>'))
       .pipe(htmlmin({
         collapseWhitespace: true
       }))
+      .pipe(minifyinline())
       .pipe(dest(path.build))
   },
   fonts: function() {
@@ -91,34 +136,33 @@ const build = {
       .pipe(dest(path.build + '/icons'))
   },
   css: function() {
-    return src(path.src + '/css/*.css')
+    return src(cssFiles)
       .pipe(concat(filename.css))
       .pipe(csso())
+      .pipe(uglifycss({
+        "uglyComments": true
+      }))
       .pipe(dest(path.build + '/css'))
   },
-  jsDependencies: function() {
-    return src(jsDependencies)
-      .pipe(concat(filename.jsDependencies))
-      .pipe(dest(path.build + '/js'))
-  },
-  jsFiles: function() {
-    return src(jsFiles)
-      .pipe(concat(filename.jsFiles))
-      .pipe(uglify())
-      .pipe(dest(path.build + '/js', {
-        sourcemaps: '.'
-      }))
-  },
   js: function() {
-    return src([path.build + '/js/' + filename.jsDependencies, path.build + '/js/' + filename.jsFiles])
+    const noVendors = filter(jsFiles, {
+      restore: true
+    });
+    return src(jsDependencies.concat(jsFiles), {
+        sourcemaps: true
+      })
+      .pipe(noVendors)
+      .pipe(uglify())
+      .pipe(noVendors.restore)
       .pipe(concat(filename.js))
       .pipe(dest(path.build + '/js', {
         sourcemaps: '.'
       }))
   },
-  jsClean: function() {
-    return src([path.build + '/js/' + filename.jsDependencies, path.build + '/js/' + filename.jsFiles])
-      .pipe(clean())
+  initialBackground: function() {
+    return src(path.src + '/js/initial-background.js')
+      .pipe(uglify())
+      .pipe(dest(path.build + '/js'))
   }
 }
 
@@ -132,10 +176,14 @@ const dev = {
     })
   },
   html: function() {
-    watch(path.src + '/index.html', {
+    watch(path.src + '/**/*.html', {
       ignoreInitial: false
     }, function() {
       return src(path.src + '/index.html')
+        .pipe(fileinclude({
+          prefix: '@@',
+          basepath: '@file'
+        }))
         .pipe(dest(path.dev))
     })
   },
@@ -156,10 +204,10 @@ const dev = {
     })
   },
   css: function() {
-    watch(path.src + '/css/*.css', {
+    watch(cssFiles, {
       ignoreInitial: false
     }, function() {
-      return src(path.src + '/css/*.css')
+      return src(cssFiles)
         .pipe(dest(path.dev + '/css'))
     })
   },
@@ -170,8 +218,16 @@ const dev = {
       return src(jsFiles)
         .pipe(dest(path.dev + '/js'))
     })
+  },
+  initialBackground: function() {
+    watch(path.src + '/js/initial-background.js', {
+      ignoreInitial: false
+    }, function() {
+      return src(path.src + '/js/initial-background.js')
+        .pipe(dest(path.dev + '/js'))
+    })
   }
 }
 
-exports.dev = parallel(dev.manifest, dev.html, dev.fonts, dev.icons, dev.css, dev.js)
-exports.build = series(parallel(build.manifest, build.html, build.fonts, build.icons, build.css), series(build.jsDependencies, build.jsFiles, build.js), build.jsClean)
+exports.dev = parallel(dev.manifest, dev.html, dev.fonts, dev.icons, dev.css, dev.js, dev.initialBackground)
+exports.build = parallel(build.manifest, build.html, build.fonts, build.icons, build.css, build.js, build.initialBackground)

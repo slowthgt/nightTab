@@ -3,185 +3,684 @@ var bookmarks = (function() {
   var mod = {};
 
   mod.all = [{
-    display: "icon",
-    letter: "DEV",
-    icon: {
-      name: "code",
-      prefix: "fas",
-      label: "Code"
+    name: {
+      text: "Cool stuff",
+      show: true
     },
-    name: "Devdocs",
-    url: "http://devdocs.io/",
-    accent: {
-      override: false,
+    openAll: {
+      show: true
+    },
+    items: [{
+      display: {
+        direction: "vertical",
+        order: "visualname",
+        alignment: "centercenter",
+        gutter: 2,
+        rotate: 0,
+        translate: {
+          x: 0,
+          y: 0
+        },
+        visual: {
+          show: true,
+          type: "icon",
+          letter: {
+            size: 3,
+            text: "AS"
+          },
+          image: {
+            size: 3,
+            url: ""
+          },
+          icon: {
+            size: 3,
+            name: "dice-d20",
+            prefix: "fas",
+            label: "Dice D20"
+          },
+          shadow: {
+            size: 0
+          }
+        },
+        name: {
+          show: true,
+          text: "awesomeSheet",
+          size: 0.9
+        }
+      },
+      url: "https://zombiefox.github.io/awesomeSheet/",
+      accent: {
+        by: "theme",
+        hsl: {
+          h: 0,
+          s: 0,
+          l: 0
+        },
+        rgb: {
+          r: 0,
+          g: 0,
+          b: 0
+        }
+      },
       color: {
-        r: null,
-        g: null,
-        b: null
-      }
-    },
-    timeStamp: 1546453101749
+        by: "theme",
+        hsl: {
+          h: 0,
+          s: 0,
+          l: 0
+        },
+        rgb: {
+          r: 0,
+          g: 0,
+          b: 0
+        },
+        opacity: 1
+      },
+      background: {
+        show: false,
+        type: "image",
+        opacity: 1,
+        image: {
+          url: ""
+        },
+        video: {
+          url: ""
+        }
+      },
+      wide: false,
+      tall: false,
+      searchMatch: false,
+      timeStamp: 1546453104010
+    }, {
+      display: {
+        direction: "vertical",
+        order: "visualname",
+        alignment: "centercenter",
+        gutter: 2,
+        rotate: 0,
+        translate: {
+          x: 0,
+          y: 0
+        },
+        visual: {
+          show: true,
+          type: "letter",
+          letter: {
+            size: 3,
+            text: "AZ"
+          },
+          image: {
+            size: 3,
+            url: ""
+          },
+          icon: {
+            size: 3,
+            name: "amazon",
+            prefix: "fab",
+            label: "Amazon"
+          },
+          shadow: {
+            size: 0
+          }
+        },
+        name: {
+          show: true,
+          text: "Amazon",
+          size: 0.9
+        }
+      },
+      url: "https://www.amazon.co.uk/",
+      accent: {
+        by: "theme",
+        hsl: {
+          h: 0,
+          s: 0,
+          l: 0
+        },
+        rgb: {
+          r: 0,
+          g: 0,
+          b: 0
+        }
+      },
+      color: {
+        by: "theme",
+        hsl: {
+          h: 0,
+          s: 0,
+          l: 0
+        },
+        rgb: {
+          r: 0,
+          g: 0,
+          b: 0
+        },
+        opacity: 1
+      },
+      background: {
+        show: false,
+        type: "image",
+        opacity: 1,
+        image: {
+          url: ""
+        },
+        video: {
+          url: ""
+        }
+      },
+      wide: false,
+      tall: false,
+      searchMatch: false,
+      timeStamp: 1546453107633
+    }, {
+      display: {
+        direction: "vertical",
+        order: "visualname",
+        alignment: "centercenter",
+        gutter: 2,
+        rotate: 0,
+        translate: {
+          x: 0,
+          y: 0
+        },
+        visual: {
+          show: true,
+          type: "letter",
+          letter: {
+            size: 3,
+            text: "GM"
+          },
+          image: {
+            size: 3,
+            url: ""
+          },
+          icon: {
+            size: 3,
+            name: "envelope",
+            prefix: "fas",
+            label: "Envelope"
+          },
+          shadow: {
+            size: 0
+          }
+        },
+        name: {
+          show: true,
+          text: "Gmail",
+          size: 0.9
+        }
+      },
+      url: "https://mail.google.com/",
+      accent: {
+        by: "theme",
+        hsl: {
+          h: 0,
+          s: 0,
+          l: 0
+        },
+        rgb: {
+          r: 0,
+          g: 0,
+          b: 0
+        }
+      },
+      color: {
+        by: "theme",
+        hsl: {
+          h: 0,
+          s: 0,
+          l: 0
+        },
+        rgb: {
+          r: 0,
+          g: 0,
+          b: 0
+        },
+        opacity: 1
+      },
+      background: {
+        show: false,
+        type: "image",
+        opacity: 1,
+        image: {
+          url: ""
+        },
+        video: {
+          url: ""
+        }
+      },
+      wide: false,
+      tall: false,
+      searchMatch: false,
+      timeStamp: 1546453110265
+    }, {
+      display: {
+        direction: "vertical",
+        order: "visualname",
+        alignment: "centercenter",
+        gutter: 2,
+        rotate: 0,
+        translate: {
+          x: 0,
+          y: 0
+        },
+        visual: {
+          show: true,
+          type: "icon",
+          letter: {
+            size: 3,
+            text: "R"
+          },
+          image: {
+            size: 3,
+            url: ""
+          },
+          icon: {
+            size: 3,
+            name: "reddit-alien",
+            prefix: "fab",
+            label: "reddit Alien"
+          },
+          shadow: {
+            size: 0
+          }
+        },
+        name: {
+          show: true,
+          text: "Reddit",
+          size: 0.9
+        }
+      },
+      url: "https://www.reddit.com/",
+      accent: {
+        by: "theme",
+        hsl: {
+          h: 0,
+          s: 0,
+          l: 0
+        },
+        rgb: {
+          r: 0,
+          g: 0,
+          b: 0
+        }
+      },
+      color: {
+        by: "theme",
+        hsl: {
+          h: 0,
+          s: 0,
+          l: 0
+        },
+        rgb: {
+          r: 0,
+          g: 0,
+          b: 0
+        },
+        opacity: 1
+      },
+      background: {
+        show: false,
+        type: "image",
+        opacity: 1,
+        image: {
+          url: ""
+        },
+        video: {
+          url: ""
+        }
+      },
+      wide: false,
+      tall: false,
+      searchMatch: false,
+      timeStamp: 1546453111491
+    }, {
+      display: {
+        direction: "vertical",
+        order: "visualname",
+        alignment: "centercenter",
+        gutter: 2,
+        rotate: 0,
+        translate: {
+          x: 0,
+          y: 0
+        },
+        visual: {
+          show: true,
+          type: "icon",
+          letter: {
+            size: 3,
+            text: "N"
+          },
+          image: {
+            size: 3,
+            url: ""
+          },
+          icon: {
+            size: 3,
+            name: "film",
+            prefix: "fas",
+            label: "Film"
+          },
+          shadow: {
+            size: 0
+          }
+        },
+        name: {
+          show: true,
+          text: "Netflix",
+          size: 0.9
+        }
+      },
+      url: "https://www.netflix.com/",
+      accent: {
+        by: "theme",
+        hsl: {
+          h: 0,
+          s: 0,
+          l: 0
+        },
+        rgb: {
+          r: 0,
+          g: 0,
+          b: 0
+        }
+      },
+      color: {
+        by: "theme",
+        hsl: {
+          h: 0,
+          s: 0,
+          l: 0
+        },
+        rgb: {
+          r: 0,
+          g: 0,
+          b: 0
+        },
+        opacity: 1
+      },
+      background: {
+        show: false,
+        type: "image",
+        opacity: 1,
+        image: {
+          url: ""
+        },
+        video: {
+          url: ""
+        }
+      },
+      wide: false,
+      tall: false,
+      searchMatch: false,
+      timeStamp: 1546453104460
+    }, {
+      display: {
+        direction: "vertical",
+        order: "visualname",
+        alignment: "centercenter",
+        gutter: 2,
+        rotate: 0,
+        translate: {
+          x: 0,
+          y: 0
+        },
+        visual: {
+          show: true,
+          type: "letter",
+          letter: {
+            size: 3,
+            text: "DR"
+          },
+          image: {
+            size: 3,
+            url: ""
+          },
+          icon: {
+            size: 3,
+            name: "",
+            prefix: "",
+            label: ""
+          },
+          shadow: {
+            size: 0
+          }
+        },
+        name: {
+          show: true,
+          text: "Drive",
+          size: 0.9
+        }
+      },
+      url: "https://drive.google.com/drive/",
+      accent: {
+        by: "theme",
+        hsl: {
+          h: 0,
+          s: 0,
+          l: 0
+        },
+        rgb: {
+          r: 0,
+          g: 0,
+          b: 0
+        }
+      },
+      color: {
+        by: "theme",
+        hsl: {
+          h: 0,
+          s: 0,
+          l: 0
+        },
+        rgb: {
+          r: 0,
+          g: 0,
+          b: 0
+        },
+        opacity: 1
+      },
+      background: {
+        show: false,
+        type: "image",
+        opacity: 1,
+        image: {
+          url: ""
+        },
+        video: {
+          url: ""
+        }
+      },
+      wide: false,
+      tall: false,
+      searchMatch: false,
+      timeStamp: 1546453111953
+    }]
   }, {
-    display: "icon",
-    letter: "AS",
-    icon: {
-      name: "dice-d20",
-      prefix: "fas",
-      label: "Dice D20"
+    name: {
+      text: "Dev sites",
+      show: true
     },
-    name: "awesomeSheet",
-    url: "https://zombiefox.github.io/awesomeSheet/",
-    accent: {
-      override: false,
+    openAll: {
+      show: true
+    },
+    items: [{
+      display: {
+        direction: "vertical",
+        order: "visualname",
+        alignment: "centercenter",
+        gutter: 2,
+        rotate: 0,
+        translate: {
+          x: 0,
+          y: 0
+        },
+        visual: {
+          show: true,
+          type: "icon",
+          letter: {
+            size: 3,
+            text: "DEV"
+          },
+          image: {
+            size: 3,
+            url: ""
+          },
+          icon: {
+            size: 3,
+            name: "code",
+            prefix: "fas",
+            label: "Code"
+          },
+          shadow: {
+            size: 0
+          }
+        },
+        name: {
+          show: true,
+          text: "Devdocs",
+          size: 0.9
+        }
+      },
+      url: "http://devdocs.io/",
+      accent: {
+        by: "theme",
+        hsl: {
+          h: 0,
+          s: 0,
+          l: 0
+        },
+        rgb: {
+          r: 0,
+          g: 0,
+          b: 0
+        }
+      },
       color: {
-        r: null,
-        g: null,
-        b: null
-      }
-    },
-    timeStamp: 1546453104010
-  }, {
-    display: "icon",
-    letter: "N",
-    icon: {
-      name: "film",
-      prefix: "fas",
-      label: "Film"
-    },
-    name: "Netflix",
-    url: "https://www.netflix.com/",
-    accent: {
-      override: false,
+        by: "theme",
+        hsl: {
+          h: 0,
+          s: 0,
+          l: 0
+        },
+        rgb: {
+          r: 0,
+          g: 0,
+          b: 0
+        },
+        opacity: 1
+      },
+      background: {
+        show: false,
+        type: "image",
+        opacity: 1,
+        image: {
+          url: ""
+        },
+        video: {
+          url: ""
+        }
+      },
+      wide: false,
+      tall: false,
+      searchMatch: false,
+      timeStamp: 1546453101749
+    }, {
+      display: {
+        direction: "vertical",
+        order: "visualname",
+        alignment: "centercenter",
+        gutter: 2,
+        rotate: 0,
+        translate: {
+          x: 0,
+          y: 0
+        },
+        visual: {
+          show: true,
+          type: "icon",
+          letter: {
+            size: 3,
+            text: "GIT"
+          },
+          image: {
+            size: 3,
+            url: ""
+          },
+          icon: {
+            size: 3,
+            name: "github",
+            prefix: "fab",
+            label: "GitHub"
+          },
+          shadow: {
+            size: 0
+          }
+        },
+        name: {
+          show: true,
+          text: "Github",
+          size: 0.9
+        }
+      },
+      url: "https://github.com/",
+      accent: {
+        by: "theme",
+        hsl: {
+          h: 0,
+          s: 0,
+          l: 0
+        },
+        rgb: {
+          r: 0,
+          g: 0,
+          b: 0
+        }
+      },
       color: {
-        r: null,
-        g: null,
-        b: null
-      }
-    },
-    timeStamp: 1546453104460
-  }, {
-    display: "letter",
-    letter: "AZ",
-    icon: {
-      name: "amazon",
-      prefix: "fab",
-      label: "Amazon"
-    },
-    name: "Amazon",
-    url: "https://www.amazon.co.uk/",
-    accent: {
-      override: false,
-      color: {
-        r: null,
-        g: null,
-        b: null
-      }
-    },
-    timeStamp: 1546453107633
-  }, {
-    display: "icon",
-    letter: "YT",
-    icon: {
-      name: "youtube",
-      prefix: "fab",
-      label: "YouTube"
-    },
-    name: "Youtube",
-    url: "https://www.youtube.com/",
-    accent: {
-      override: false,
-      color: {
-        r: null,
-        g: null,
-        b: null
-      }
-    },
-    timeStamp: 1546453108071
-  }, {
-    display: "letter",
-    letter: "GIT",
-    icon: {
-      name: "github",
-      prefix: "fab",
-      label: "GitHub"
-    },
-    name: "Github",
-    url: "https://github.com/",
-    accent: {
-      override: false,
-      color: {
-        r: null,
-        g: null,
-        b: null
-      }
-    },
-    timeStamp: 1546453108926
-  }, {
-    display: "letter",
-    letter: "GM",
-    icon: {
-      name: "envelope",
-      prefix: "fas",
-      label: "Envelope"
-    },
-    name: "Gmail",
-    url: "https://mail.google.com/",
-    accent: {
-      override: false,
-      color: {
-        r: null,
-        g: null,
-        b: null
-      }
-    },
-    timeStamp: 1546453110265
-  }, {
-    display: "icon",
-    letter: "R",
-    icon: {
-      name: "reddit-alien",
-      prefix: "fab",
-      label: "reddit Alien"
-    },
-    name: "Reddit",
-    url: "https://www.reddit.com/",
-    accent: {
-      override: false,
-      color: {
-        r: null,
-        g: null,
-        b: null
-      }
-    },
-    timeStamp: 1546453111491
-  }, {
-    display: "letter",
-    letter: "DR",
-    icon: {
-      name: null,
-      prefix: null,
-      label: null
-    },
-    name: "Drive",
-    url: "https://drive.google.com/drive/",
-    accent: {
-      override: false,
-      color: {
-        r: null,
-        g: null,
-        b: null
-      }
-    },
-    timeStamp: 1546453111953
+        by: "theme",
+        hsl: {
+          h: 0,
+          s: 0,
+          l: 0
+        },
+        rgb: {
+          r: 0,
+          g: 0,
+          b: 0
+        },
+        opacity: 1
+      },
+      background: {
+        show: false,
+        type: "image",
+        opacity: 1,
+        image: {
+          url: ""
+        },
+        video: {
+          url: ""
+        }
+      },
+      wide: false,
+      tall: false,
+      searchMatch: false,
+      timeStamp: 1546453108926
+    }]
   }];
 
   mod.get = function(data) {
     var _singleBookmark = function() {
       var found = false;
-      for (var i = 0; i < mod.all.length; i++) {
-        if (mod.all[i].timeStamp === data.timeStamp) {
-          found = mod.all[i];
-        };
+      if (mod.all.length > 0) {
+        mod.all.forEach(function(arrayItem, index) {
+          arrayItem.forEach(function(arrayItem, index) {
+            if (arrayItem[index].timeStamp === data.timeStamp) {
+              found = arrayItem[index];
+            };
+          });
+        });
       };
       return found;
     };
@@ -198,67 +697,134 @@ var bookmarks = (function() {
     };
   };
 
-  mod.add = function(data) {
-    mod.all.push(data);
+  mod.add = {
+    link: function(data) {
+      if (data) {
+        if (data.position.group.new) {
+          mod.add.group({
+            position: {
+              origin: null,
+              destination: data.position.destination.group
+            },
+            group: {
+              name: {
+                text: data.position.group.name.text,
+                show: data.position.group.name.show
+              },
+              openAll: {
+                show: data.position.group.openAll.show
+              },
+              items: []
+            }
+          });
+        };
+        mod.all[data.position.destination.group].items.splice(data.position.destination.item, 0, data.link);
+      };
+    },
+    group: function(data) {
+      if (data) {
+        mod.all.splice(data.position.destination, 0, data.group);
+      };
+    }
   };
 
-  mod.edit = function(data) {
-    for (var i = 0; i < mod.all.length; i++) {
-      if (mod.all[i].timeStamp === data.timeStamp) {
-        mod.all[i] = data;
+  mod.edit = {
+    link: function(data) {
+      if (data.position.group.new) {
+        mod.add.group({
+          position: {
+            origin: null,
+            destination: data.position.destination.group
+          },
+          group: {
+            name: {
+              text: data.position.group.name.text,
+              show: data.position.group.name.show
+            },
+            openAll: {
+              show: data.position.group.openAll.show
+            },
+            items: []
+          }
+        });
       };
-    };
+      var item = JSON.parse(JSON.stringify(data.link));
+      mod.all[data.position.origin.group].items.splice(data.position.origin.item, 1);
+      mod.all[data.position.destination.group].items.splice(data.position.destination.item, 0, item);
+    },
+    group: function(data) {
+      var group = JSON.parse(JSON.stringify(data.group));
+      mod.all.splice(data.position.origin, 1);
+      mod.all.splice(data.position.destination, 0, group);
+    }
   };
 
-  mod.remove = function(data) {
-    for (var i = 0; i < mod.all.length; i++) {
-      if (mod.all[i].timeStamp === data.timeStamp) {
-        mod.all.splice(mod.all.indexOf(mod.all[i]), 1);
-      };
-    };
+  mod.remove = {
+    link: function(data) {
+      mod.all[data.position.origin.group].items.splice(data.position.origin.item, 1);
+    },
+    group: function(data) {
+      mod.all.splice(data.position.origin, 1);
+    }
   };
 
   mod.sort = function(by) {
     var action = {
       name: function(array) {
-        return helper.sortObject(array, "name");
+        return helper.sortObject(array, "display.name.text");
       },
       letter: function(array) {
-        return helper.sortObject(array, "letter");
+        return helper.sortObject(array, "display.visual.letter.text");
       },
       icon: function(array) {
-        return helper.sortObject(array, "icon.name");
+        return helper.sortObject(array, "display.visual.icon.name");
       }
     };
-    mod.all = action[by](mod.all);
+    mod.all.forEach(function(arrayItem, index) {
+      arrayItem.items = action[by](arrayItem.items);
+    });
   };
 
-  mod.move = function(origin, destination) {
-    mod.all = helper.moveArrayItem(mod.all, origin, destination);
+  mod.move = {
+    link: function(data) {
+      var item = JSON.parse(JSON.stringify(mod.all[data.position.origin.group].items[data.position.origin.item]));
+      mod.all[data.position.origin.group].items.splice(data.position.origin.item, 1);
+      mod.all[data.position.destination.group].items.splice(data.position.destination.item, 0, item);
+    },
+    group: function(data) {
+      var group = JSON.parse(JSON.stringify(mod.all[data.position.origin]));
+      mod.all.splice(data.position.origin, 1);
+      mod.all.splice(data.position.destination, 0, group);
+    }
+  };
+
+  mod.count = function() {
+    var count = 0;
+    mod.all.forEach(function(arrayItem, index) {
+      count = count + arrayItem.items.length
+    });
+    return count;
+  };
+
+  var count = function() {
+    return mod.count();
   };
 
   var get = function(data) {
     return mod.get(data);
   };
 
-  var add = function(data) {
-    mod.add(data);
-  };
-
-  var edit = function(data) {
-    mod.edit(data);
-  };
-
   var sort = function(by) {
     mod.sort(by);
   };
 
-  var move = function(origin, destination) {
-    mod.move(origin, destination);
-  };
-
-  var remove = function(data) {
-    mod.remove(data);
+  var remove = {
+    link: function(data) {
+      mod.remove.link(data);
+    },
+    group: function(data) {
+      mod.remove.group(data);
+    }
   };
 
   var init = function() {
@@ -272,10 +838,8 @@ var bookmarks = (function() {
     init: init,
     mod: mod,
     get: get,
-    add: add,
-    edit: edit,
     sort: sort,
-    move: move,
+    count: count,
     remove: remove
   };
 

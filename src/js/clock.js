@@ -1,30 +1,5 @@
 var clock = (function() {
 
-  var _makeTimeObject = function() {
-    var time = helper.getDateTime();
-    time.meridiem = "AM";
-    if (state.get().header.clock.hour24.show) {
-      if (time.hours < 10) {
-        time.hours = "0" + time.hours;
-      };
-    } else {
-      if (time.hours > 12) {
-        time.meridiem = "PM";
-        time.hours = time.hours - 12;
-      };
-      if (time.hours == 0) {
-        time.hours = 12;
-      };
-    };
-    if (time.minutes < 10) {
-      time.minutes = "0" + time.minutes;
-    };
-    if (time.seconds < 10) {
-      time.seconds = "0" + time.seconds;
-    };
-    return time;
-  };
-
   var bind = {};
 
   bind.tick = function() {
@@ -37,99 +12,111 @@ var clock = (function() {
   var render = {};
 
   render.clear = function() {
-    var clock = helper.e(".clock");
-    while (clock.lastChild) {
-      clock.removeChild(clock.lastChild);
+    if (state.get.current().header.clock.seconds.show || state.get.current().header.clock.minutes.show || state.get.current().header.clock.hours.show) {
+      var clock = helper.e(".clock");
+      while (clock.lastChild) {
+        clock.removeChild(clock.lastChild);
+      };
     };
   };
 
   render.all = function() {
-    if (state.get().header.clock.seconds.show || state.get().header.clock.minutes.show || state.get().header.clock.hours.show) {
-      var clock = helper.e(".clock");
-      var timeObject = _makeTimeObject();
+    if (state.get.current().header.clock.seconds.show || state.get.current().header.clock.minutes.show || state.get.current().header.clock.hours.show) {
+      var timeDateNow = moment();
+      var timeStrings = {
+        hours: null,
+        minutes: null,
+        seconds: null,
+        meridiem: null
+      };
       var action = {
         hours: {
-          word: function(value) {
-            if (state.get().header.clock.hour24.show && value < 10) {
-              return "Zero " + helper.toWords(value);
-            } else {
-              return helper.toWords(value);
+          word: function() {
+            timeStrings.hours = timeDateNow.hours();
+            if (!state.get.current().header.clock.hour24.show && timeDateNow.hours() > 12) {
+              timeStrings.hours = timeStrings.hours - 12;
+            };
+            if (!state.get.current().header.clock.hour24.show && timeDateNow.hours() == 0) {
+              timeStrings.hours = 12;
+            };
+            timeStrings.hours = helper.toWords(timeStrings.hours);
+            if (state.get.current().header.clock.hour24.show && timeDateNow.hours() > 0 && timeDateNow.hours() < 10) {
+              timeStrings.hours = "Zero " + timeStrings.hours;
             };
           },
-          number: function(value) {
-            return value;
+          number: function() {
+            timeStrings.hours = timeDateNow.hours();
+            if (!state.get.current().header.clock.hour24.show && timeDateNow.hours() > 12) {
+              timeStrings.hours = timeStrings.hours - 12;
+            };
+            if (!state.get.current().header.clock.hour24.show && timeDateNow.hours() == 0) {
+              timeStrings.hours = 12;
+            };
+            if (state.get.current().header.clock.hour24.show && timeDateNow.hours() < 10) {
+              timeStrings.hours = "0" + timeStrings.hours;
+            };
           }
         },
         minutes: {
-          word: function(value) {
-            if (value < 10) {
-              return "Zero " + helper.toWords(value);
-            } else {
-              return helper.toWords(value);
+          word: function() {
+            timeStrings.minutes = helper.toWords(timeDateNow.minutes());
+            if (timeDateNow.minutes() > 0 && timeDateNow.minutes() < 10) {
+              timeStrings.minutes = "Zero " + timeStrings.minutes;
             };
           },
-          number: function(value) {
-            return value;
+          number: function() {
+            timeStrings.minutes = timeDateNow.minutes();
+            if (timeDateNow.minutes() < 10) {
+              timeStrings.minutes = "0" + timeStrings.minutes;
+            };
           }
         },
         seconds: {
-          word: function(value) {
-            return helper.toWords(value);
+          word: function() {
+            timeStrings.seconds = helper.toWords(timeDateNow.seconds());
+            if (timeDateNow.seconds() > 0 && timeDateNow.seconds() < 10) {
+              timeStrings.seconds = "Zero " + timeStrings.seconds;
+            };
           },
-          number: function(value) {
-            return value;
+          number: function() {
+            timeStrings.seconds = timeDateNow.seconds();
+            if (timeDateNow.seconds() < 10) {
+              timeStrings.seconds = "0" + timeStrings.seconds;
+            };
           }
+        },
+        meridiem: function() {
+          timeStrings.meridiem = timeDateNow.format("A");
         }
       };
-      timeObject.hours = action.hours[state.get().header.clock.hours.display](timeObject.hours);
-      timeObject.minutes = action.minutes[state.get().header.clock.minutes.display](timeObject.minutes);
-      timeObject.seconds = action.seconds[state.get().header.clock.seconds.display](timeObject.seconds);
-      var elementHours = helper.makeNode({
-        tag: "span",
-        text: timeObject.hours,
-        attr: [{
-          key: "class",
-          value: "clock-item clock-hours"
-        }]
-      });
-      var elementMinutes = helper.makeNode({
-        tag: "span",
-        text: timeObject.minutes,
-        attr: [{
-          key: "class",
-          value: "clock-item clock-minutes"
-        }]
-      });
-      var elementSeconds = helper.makeNode({
-        tag: "span",
-        text: timeObject.seconds,
-        attr: [{
-          key: "class",
-          value: "clock-item clock-seconds"
-        }]
-      });
-      var elementMeridiem = helper.makeNode({
-        tag: "span",
-        text: timeObject.meridiem,
-        attr: [{
-          key: "class",
-          value: "clock-item clock-meridiem"
-        }]
-      });
-      if (state.get().header.clock.hours.show) {
+      action.hours[state.get.current().header.clock.hours.display]();
+      action.minutes[state.get.current().header.clock.minutes.display]();
+      action.seconds[state.get.current().header.clock.seconds.display]();
+      action.meridiem();
+      var clock = helper.e(".clock");
+      var elementHours = helper.node("span:" + timeStrings.hours + "|class:clock-item clock-hours");
+      var elementMinutes = helper.node("span:" + timeStrings.minutes + "|class:clock-item clock-minutes");
+      var elementSeconds = helper.node("span:" + timeStrings.seconds + "|class:clock-item clock-seconds");
+      var elementMeridiem = helper.node("span:" + timeStrings.meridiem + "|class:clock-item clock-meridiem");
+      if (state.get.current().header.clock.hours.show) {
         clock.appendChild(elementHours);
       };
-      if (state.get().header.clock.minutes.show) {
+      if (state.get.current().header.clock.minutes.show) {
         clock.appendChild(elementMinutes);
       };
-      if (state.get().header.clock.seconds.show) {
+      if (state.get.current().header.clock.seconds.show) {
         clock.appendChild(elementSeconds);
       };
-      if (!state.get().header.clock.hour24.show && state.get().header.clock.meridiem.show) {
+      if (!state.get.current().header.clock.hour24.show && state.get.current().header.clock.meridiem.show) {
         clock.appendChild(elementMeridiem);
       };
-      if (state.get().header.clock.separator.show) {
-        var separatorCharacter = ":";
+      if (state.get.current().header.clock.separator.show) {
+        var separatorCharacter;
+        if (helper.checkIfValidString(state.get.current().header.clock.separator.text)) {
+          separatorCharacter = helper.trimString(state.get.current().header.clock.separator.text);
+        } else {
+          separatorCharacter = ":";
+        };
         var parts = clock.querySelectorAll("span");
         if (parts.length > 1) {
           parts.forEach(function(arrayItem, index) {

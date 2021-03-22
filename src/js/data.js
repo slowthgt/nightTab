@@ -1,6 +1,8 @@
 var data = (function() {
 
-  var _saveName = "nitghTab";
+  var _saveName = "nightTab";
+
+  var _backupName = "nightTab-backup";
 
   var mod = {};
 
@@ -12,14 +14,6 @@ var data = (function() {
   };
 
   mod.export = function() {
-    var encode = function(string) {
-      var out = [];
-      for (var i = 0; i < string.length; i++) {
-        out[i] = string.charCodeAt(i);
-      };
-      return new Uint8Array(out);
-    };
-    var tempAchor = helper.node("a");
     var timeStamp = helper.getDateTime();
     var _timeStampPrefix = function(value) {
       if (value < 10) {
@@ -33,16 +27,11 @@ var data = (function() {
     timeStamp.date = _timeStampPrefix(timeStamp.date);
     timeStamp.month = _timeStampPrefix(timeStamp.month + 1);
     timeStamp.year = _timeStampPrefix(timeStamp.year);
-    timeStamp = timeStamp.hours + " " + timeStamp.minutes + " " + timeStamp.seconds + " - " + timeStamp.date + "." + timeStamp.month + "." + timeStamp.year;
-    var fileName = "nightTab backup - " + timeStamp + ".json";
-    var str = JSON.stringify(load());
-    var data = encode(str);
-    var blob = new Blob([data], {
-      type: "application/json"
-    });
-    var url = URL.createObjectURL(blob);
+    timeStamp = timeStamp.year + "." + timeStamp.month + "." + timeStamp.date + " - " + timeStamp.hours + " " + timeStamp.minutes + " " + timeStamp.seconds;
+    var fileName = _saveName + " backup - " + timeStamp + ".json";
+    var data = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(load()));
     var link = document.createElement("a");
-    link.setAttribute("href", url);
+    link.setAttribute("href", data);
     link.setAttribute("download", fileName);
     link.addEventListener("click", function(event) {
       this.remove();
@@ -53,16 +42,41 @@ var data = (function() {
 
   mod.restore = function(data) {
     if (data) {
-      if (!("version" in data) || data.version != version.get()) {
+      if (!("version" in data) || data.version != version.get().number) {
         console.log("data version " + data.version + " found less than current");
+        mod.backup(data);
         data = update.run(data);
         mod.set(_saveName, JSON.stringify(data));
       } else {
-        console.log("data version " + version.get() + " no need to run update");
+        console.log("data version " + version.get().number + " no need to run update");
         mod.set(_saveName, JSON.stringify(data));
       };
     } else {
       console.log("no data found to load");
+    };
+  };
+
+  mod.backup = function(data) {
+    if (data) {
+      var dataBackup = JSON.parse(JSON.stringify(data));
+      if (dataBackup.state.background.image) {
+        if (dataBackup.state.background.image.file) {
+          if (helper.checkIfValidString(dataBackup.state.background.image.file.data)) {
+            dataBackup.state.background.image.file.name = "";
+            dataBackup.state.background.image.file.data = "";
+          };
+        };
+      };
+      if (dataBackup.state.background.visual) {
+        if (dataBackup.state.background.visual.image.file) {
+          if (helper.checkIfValidString(dataBackup.state.background.visual.image.file.data)) {
+            dataBackup.state.background.visual.image.file.name = "";
+            dataBackup.state.background.visual.image.file.data = "";
+          };
+        };
+      };
+      console.log("data version " + dataBackup.version + " backed up");
+      mod.set(_backupName, JSON.stringify(dataBackup));
     };
   };
 
@@ -76,6 +90,14 @@ var data = (function() {
 
   mod.remove = function(key) {
     localStorage.removeItem(key);
+  };
+
+  mod.nameFix = function() {
+    var data = localStorage.getItem("nitghTab");
+    if (data) {
+      localStorage.setItem(_saveName, data);
+      localStorage.removeItem("nitghTab");
+    };
   };
 
   var bind = {};
@@ -233,14 +255,18 @@ var data = (function() {
   var save = function() {
     mod.set(_saveName, JSON.stringify({
       nighttab: true,
-      version: version.get(),
-      state: state.get(),
+      version: version.get().number,
+      state: state.get.current(),
       bookmarks: bookmarks.get()
     }));
   };
 
   var load = function() {
-    return JSON.parse(mod.get(_saveName));
+    if (mod.get(_saveName) != null && mod.get(_saveName) != undefined) {
+      return JSON.parse(mod.get(_saveName));
+    } else {
+      return false;
+    };
   };
 
   var wipe = function() {
@@ -249,7 +275,8 @@ var data = (function() {
   };
 
   var init = function() {
-    mod.restore(data.load());
+    mod.nameFix();
+    mod.restore(load());
     render.feedback.empty();
   };
 
